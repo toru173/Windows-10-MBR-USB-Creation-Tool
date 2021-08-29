@@ -2,7 +2,7 @@
 
  Usage: ./createinstallmedia /path/to/win10.iso /dev/diskX. Must be run as root
 
- (https://github.com/toru173/Windows-10-MBR-USB-Creation-Tool/blob/main/Screenshot.png)
+ ![Screenshot](Screenshot.png)
 
  This is a tool created to solve a specific need - to create a Windows 10
  installation USB for legacy BIOS systems using MBR, with minimal additional
