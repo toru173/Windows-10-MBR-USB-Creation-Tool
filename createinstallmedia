@@ -28,21 +28,23 @@ function ctrl_c() {
     killall rsync &> /dev/null
     echo "Received SIGKILL. Cleaning up..."
     diskutil unmountDisk $TARGET_DISK &> /dev/null
+    wait
     hdiutil eject "$PWD"/.mnt/image &> /dev/null
     wait
+    sleep 5
     rm -rf "$PWD"/.mnt
     exit 1
 }
 
-USAGE_STRING="Usage: ./createinstallmedia /path/to/win10.iso /dev/diskX. Must be run as root"
+USAGE_STRING="Usage: ./createinstallmedia /path/to/win10.iso /dev/diskX\nMust be run as root"
 
 if [ $# != 2 ]; then
-    echo $USAGE_STRING
+    echo -e $USAGE_STRING
     exit 1
 fi
 
 if [ `whoami` != "root" ]; then
-    echo $USAGE_STRING
+    echo -e $USAGE_STRING
     exit 1
 fi
 
