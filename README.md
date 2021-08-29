@@ -15,5 +15,7 @@
  - macOS has included fdisk for a long time. The man page is dated 2002!
 
  The only external utility required is ms-sys, available at http://ms-sys.sourceforge.net
- a compiled macOS binary is included here for ease of use. This utility mimics
- Apple's 'createinstallmedia' binary, per https://support.apple.com/HT201372
+ a compiled macOS binary is included here for ease of use.
+
+ createinstallemedia mimics Apple's 'createinstallmedia' binary, available at
+ https://support.apple.com/HT201372
