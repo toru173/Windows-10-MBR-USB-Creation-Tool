@@ -1,6 +1,7 @@
 #!/bin/bash
 #
-# Usage: ./createinstallmedia /path/to/win10.iso /dev/diskX. Must be run as root
+# Usage: ./createinstallmedia /path/to/win10.iso /dev/diskX
+# Must be run as root
 #
 # This is a tool created to solve a specific need - to create a Windows 10
 # installation USB for legacy BIOS systems using MBR, with minimal additional
@@ -12,10 +13,10 @@
 #   Mac OS X Snow Leopard
 # - macOS has included fdisk for a long time. The man page is dated 2002!
 #
-# The only external utility required is ms-sys, available at http://ms-sys.sourceforge.net
-# a compiled macOS binary is included here for ease of use.
+# The only external utility required is ms-sys, available at http://ms-sys.sourceforge.net.
+# A compiled macOS binary is included here for ease of use.
 #
-# createinstallemedia mimics Apple's 'createinstallmedia' binary, available at
+# createinstallemedia mimics Apple's 'createinstallmedia' binary, documented at
 # https://support.apple.com/HT201372
 
 # Note the liberal use of redirection to /dev/null. The utilities in this script are chatty!
@@ -56,7 +57,12 @@ TARGET_VOLUME="${TARGET_DISK}s1"
 
 FORMAT_NTFS=/System/Library/Filesystems/ntfs.fs/Contents/Resources/BootCampFormatter
 
-CURRENT_DIR=$PWD
+if [ ! -f $FORMAT_NTFS ]; then
+    echo "Unable to find BootCampFormatter binary at $(dirname $FORMAT_NTFS)"
+    echo "Please create a new issue at https://github.com/toru173/Windows-10-MBR-USB-Creation-Tool/issues including your OS Version and Build Number"
+    exit 1
+fi
+
 
 echo "Ready to start."
 echo "To continue we need to erase the device at $TARGET_DISK"
@@ -80,17 +86,19 @@ if [ $? != 0 ]; then
     exit 1
 fi
 
+echo -n "Erasing disk"
+
+
 if [ $DRYRUN = false ]; then
     diskutil quiet eraseDisk exfat Untitled MBR $TARGET_DISK &
-    echo -n "Erasing disk"
-    while [ $(pgrep -x diskutil) ]; do
+    while [ $(pgrep -n -x diskutil) ]; do
         sleep 1
         echo -n "."
     done
 fi
 
 if [ $? != 0 ]; then
-    echo "Error when attempting to format $TARGET_DISK"
+    echo "Error when attempting to erase $TARGET_DISK"
     hdiutil eject "$PWD"/.mnt/image &> /dev/null
     wait
     rm -rf "$PWD"/.mnt
@@ -142,10 +150,10 @@ echo "Copying boot files..."
 if [ $DRYRUN = false ]; then
     diskutil unmountDisk $TARGET_DISK &> /dev/null
     wait
-    ./ms-sys/ms-sys -n $TARGET_VOLUME &> /dev/null
+    "$PWD"/ms-sys/ms-sys -n $TARGET_VOLUME &> /dev/null
     diskutil unmountDisk $TARGET_DISK &> /dev/null
     wait
-    ./ms-sys/ms-sys -7 $TARGET_DISK &> /dev/null
+    "$PWD"/ms-sys/ms-sys -7 $TARGET_DISK &> /dev/null
 fi
 
 diskutil unmountDisk $TARGET_DISK &> /dev/null
