@@ -1,6 +1,6 @@
 # Windows 10 MBR USB Media Creation Tool
 
- Usage: ./createinstallmedia /path/to/win10.iso /dev/diskX
+ Usage: ./createinstallmedia /path/to/win10.iso /dev/diskX  
  Must be run as root
 
  ![Screenshot](Screenshot.png)
@@ -15,7 +15,8 @@
    Mac OS X Snow Leopard
  - macOS has included fdisk for a long time. The man page is dated 2002!
 
- The only external utility required is ms-sys, available at http://ms-sys.sourceforge.net. A compiled macOS binary is included here for ease of use.
+ The only external utility required is ms-sys, available at http://ms-sys.sourceforge.net  
+ A compiled macOS binary is included here for ease of use.
 
  createinstallemedia mimics Apple's 'createinstallmedia' binary, documented at
  https://support.apple.com/HT201372
